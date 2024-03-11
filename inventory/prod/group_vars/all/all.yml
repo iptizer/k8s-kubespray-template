@@ -1,0 +1,40 @@
+---
+kubelet_preferred_address_types: 'Hostname,ExternalDNS,ExternalIP,InternalDNS,InternalIP'
+dns_min_replicas: 1
+enable_dns_autoscaler: false
+
+## Directory where etcd data stored
+etcd_data_dir: /var/lib/etcd
+
+## Experimental kubeadm etcd deployment mode. Available only for new deployment
+#etcd_kubeadm_enabled: false
+etcd_deployment_type: host
+
+## Directory where the binaries will be installed
+bin_dir: /usr/local/bin
+
+## The access_ip variable is used to define how other nodes should access
+## the node.  This is used in flannel to allow other flannel nodes to see
+## this node for example.  The access_ip is really useful AWS and Google
+## environments where the nodes are accessed remotely by the "public" ip,
+## but don't know about that address themselves.
+# access_ip: 1.1.1.1
+
+
+## External LB example config
+## apiserver_loadbalancer_domain_name: "elb.some.domain"
+# loadbalancer_apiserver:
+#   address: 1.2.3.4
+#   port: 1234
+
+## Internal loadbalancers for apiservers
+# loadbalancer_apiserver_localhost: true
+# valid options are "nginx" or "haproxy"
+# loadbalancer_apiserver_type: nginx  # valid values "nginx" or "haproxy"
+
+## Local loadbalancer should use this port
+## And must be set port 6443
+loadbalancer_apiserver_port: 6443
+
+## If loadbalancer_apiserver_healthcheck_port variable defined, enables proxy liveness check for nginx.
+loadbalancer_apiserver_healthcheck_port: 8081

@@ -1,0 +1,9 @@
+---
+# change IP to your host address
+ansible_host: 1.2.3.4
+etcd_member_name: etcd1
+ansible_become: yes
+ansible_become_method: sudo
+ansible_python_interpreter: /usr/bin/python3
+metrics_server_enabled: false
+dns_min_replicas: 1
