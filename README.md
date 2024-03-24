@@ -75,6 +75,12 @@ vagrant reload k8s-1 --no-provision
 
 You may now deploy actual workloads from the k8s directory.
 
+To destroy the vagrant environment you can simply execute as follows (from the folder where you did the `vagrant up`):
+
+```sh
+vagrant destroy
+```
+
 ## Prod
 
 Prepare server:
@@ -106,6 +112,7 @@ Modify local files as follows:
 Then proceed as follows. The `init.sh` script will sync your inventory variables into the cloned ansible directory:
 
 ```sh
+# note that `init.sh` completely purges the `kubespray` directory
 . ./init.sh
 # follow instructions from output, sth like:
 cd kubespray
