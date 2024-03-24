@@ -1,0 +1,10 @@
+controller:
+    hostNetwork: true
+    kind: DaemonSet
+    daemonset:
+        useHostPort: true
+    dnsPolicy: "ClusterFirstWithHostNet"
+    reportNodeInternalIp: true
+    config:
+        proxy-body-size: "0"
+        allow-snippet-annotations: true

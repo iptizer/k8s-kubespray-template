@@ -1,6 +1,6 @@
 # Bootstrap
 
-The following lines document how to initalize a fresh cluster. On a real cluster, or using Vagrant. Todo so, the kubespray project will be clones to this directory. It will be excluded in *.gitignore* and all files are in this folder.
+The following lines document how to initalize a fresh cluster. On a real cluster, or using Vagrant. Todo so, the kubespray project will be cloned to this directory. It will be excluded in *.gitignore* and all files are in this folder.
 
 ## How to use this repository?
 
@@ -24,14 +24,15 @@ Using this approach requires a lot of tools and not all may work on a Windows co
 
 * python
 * pyenv
-* Virtualbox (for the local vm setup)
-* vagrant (for the local vm setup)
+* Ansible (python installation)
+* [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (for the local vm setup)
+* [vagrant](https://developer.hashicorp.com/vagrant/docs/installation) (for the local vm setup)
 
 ## Tools used
 
-See [kubespray.io](https://kubespray.io/) on detailed information about kubespray. Kubespray is a set of ansible playbooks to setup even complex Kubernetes environments.
+See [kubespray.io](https://kubespray.io/) on detailed information about kubespray. Kubespray is a set of ansible playbooks to setup even complex Kubernetes environments. The proposed setup is just a one-node cluster, but more is not a problem.
 
-See [https://developer.hashicorp.com/vagrant/docs](https://developer.hashicorp.com/vagrant/docs) for details. Vagrant may be used to set up local development environments.
+See [https://developer.hashicorp.com/vagrant/docs](https://developer.hashicorp.com/vagrant/docs) for details. Vagrant is used to set up local development environments.
 
 ## Vagrant
 
@@ -41,6 +42,7 @@ These lines explain details about the local setup.
 # execute init script. This will also chdir to the kubespray folder.
 . ./init.sh
 # the following commnd will spin up a vm with virtualbox and provision with kubespray
+# this may take 20 minutes or longer
 vagrant up
 # in case provisioning did not success, retry with the following command
 vagrant provision
@@ -53,7 +55,7 @@ vagrant ssh k8s-1
 Prepare server:
 
 * deactivate swap on the remote server
-* `youruser username     ALL=(ALL) NOPASSWD:ALL`
+* `youruser username     ALL=(ALL) NOPASSWD:ALL` (setup sudo for your ssh user)
 
 ```sh
 ssh centos@<ip>
@@ -71,7 +73,12 @@ sudo vim /etc/ssh/sshd_config # remove pw auth & root login
 sudo yum upgrade -y && sudo reboot
 ```
 
-Install Kubernetes:
+Modify local files as follows:
+
+* Move the directory `./inventory/host_vars/yourhostname` to your correct hostname.
+* Edit `./inventory/host_vars/yourhostname/all.yml` with the correct IP address.
+
+Then proceed as follows. The `init.sh` script will sync your inventory variables into the cloned ansible directory:
 
 ```sh
 . ./init.sh
@@ -80,7 +87,7 @@ cd kubespray
 ansible-playbook -i inventory/prod/inventory.ini cluster.yml
 ```
 
-And get credentials:
+After Kubernetes is set up, get Kubernetes credentials:
 
 ```sh
 ssh <ip>
@@ -102,9 +109,7 @@ Check the current default value of `kube_version` in cloned repository.
 
 ```sh
 cd kubespray
-ansible-playbook -i inventory/prod/inventory.ini -e kube_version=v1.22.10 -e upgrade_cluster_setup=true cluster.yml
+ansible-playbook -i inventory/prod/inventory.ini -e kube_version=v1.29.2 -e upgrade_cluster_setup=true cluster.yml
 # or just the newest version
 ansible-playbook -i inventory/prod/inventory.ini -e upgrade_cluster_setup=true cluster.yml
-# upgrade to specific calico version (did not trigger/ failed)
-ansible-playbook -i inventory/prod/inventory.ini -e upgrade_cluster_setup=true -e calico_version=v3.15.2 cluster.yml --tags=network
 ```
