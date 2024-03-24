@@ -36,8 +36,8 @@ helm repo update
 helm upgrade --install --create-namespace -f ./openebs/helm_openebs.yaml openebs --namespace openebs openebs/openebs
 # watch pods appearing with the following command
 kubectl get pods -n openebs -w
-# apply the storage class
-kubectl apply -f openebs_storageclass.yaml -n openebs
+# IMPORTANT!! Make hostpath the default storage class with the follwing command
+kubectl patch storageclass openebs-hostpath -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class":"true"}}}'
 ```
 
 ## 
