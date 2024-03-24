@@ -48,7 +48,32 @@ vagrant up
 vagrant provision
 # ssh to your worker node
 vagrant ssh k8s-1
+sudo su - root
+kubectl get pods -A # should show you pods running
+# print the kubernetes config after ssh to the instance (copy the config, for pasting locally)
+sudo cat /root/.kube/config
+# exit from the session
 ```
+
+To actually deploy real Kubernetes resources to the vagrant box you may proceed as follow.
+
+Save the copied Kubernetes config to your local Kubeconfig, usually in `.kube/config`. Don't forget to backup your old config.
+
+Add the following ruby code into the file `kubespray/vagrant/config.rb`:
+
+```rb
+Vagrant.configure("2") do |config|
+    config.vm.network "forwarded_port", guest: 6443, host: 6443
+end
+```
+
+Then reload vagrant with the following command:
+
+```sh
+vagrant reload k8s-1 --no-provision
+```
+
+You may now deploy actual workloads from the k8s directory.
 
 ## Prod
 
