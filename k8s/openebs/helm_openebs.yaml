@@ -1,0 +1,13 @@
+apiserver:
+  enabled: true
+analytics:
+  enabled: false
+
+ndmOperator:
+  enabled: false
+ndm:
+  enabled: true
+snapshotOperator:
+  enabled: true
+webhook:
+  enabled: true

@@ -30,6 +30,14 @@ helm upgrade --install ingress-nginx ingress-nginx \
 
 ## OpenEBS
 
-
+```sh
+helm repo add openebs https://openebs.github.io/charts
+helm repo update
+helm upgrade --install --create-namespace -f ./openebs/helm_openebs.yaml openebs --namespace openebs openebs/openebs
+# watch pods appearing with the following command
+kubectl get pods -n openebs -w
+# apply the storage class
+kubectl apply -f openebs_storageclass.yaml -n openebs
+```
 
 ## 
